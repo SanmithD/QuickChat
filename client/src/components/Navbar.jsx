@@ -15,6 +15,7 @@ function Navbar() {
             >
               <div className="size-9 rounded-lg bg-primary/10 flex items-center justify-center ">
                 <MessageSquare className="w-5 h-5 text-primary" />
+                <img src="/quick.png" alt="logo" width="100%" height="100%" />
               </div>
               <h1 className="text-lg font-bold">Quick Chat</h1>
             </Link>
