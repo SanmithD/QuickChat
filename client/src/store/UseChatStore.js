@@ -6,6 +6,7 @@ import { useAuthStore } from "./UseAuthStore";
 export const useChatStore = create((set, get)=>({
     messages: [],
     users: [],
+    favorites: [],
     selectedUser: null,
     isUsersLoading: false,
     isMessagesLoading: false,
@@ -41,25 +42,31 @@ export const useChatStore = create((set, get)=>({
         const { selectedUser, messages } = get();
         try {
             const res = await axiosInstance.post(`/message/send/${selectedUser._id}`,messageData);
-            set({ messages: [...messages, res.data] });
+            set({ messages: [...messages, res.data.newMessage] });
         } catch (error) {
             toast.error(error.message)
         }
     },
 
-    listenToMessages: () =>{
-        const { selectedUser } = get();
-        if(!selectedUser) return;
+    listenToMessages: () => {
+    const { selectedUser } = get();
+    if (!selectedUser) return;
 
-        const socket = useAuthStore.getState().socket;
+    const socket = useAuthStore.getState().socket;
+    const authUser = useAuthStore.getState().authUser;
 
+    socket.on("newMessage", (newMessage) => {
+        const isMessageForCurrentChat = 
+            (newMessage.senderId === selectedUser._id && newMessage.receiverId === authUser._id) ||
+            (newMessage.senderId === authUser._id && newMessage.receiverId === selectedUser._id);
         
-        socket.on("newMessage", (newMessage)=>{
-            const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
-            if(!isMessageSentFromSelectedUser) return;
-            set({ messages: [...get().messages, newMessage ] });
-        });
-    },
+        if (isMessageForCurrentChat) {
+            set(state => ({ 
+                messages: [...state.messages, newMessage] 
+            }));
+        }
+    });
+},
 
     unsubscribeMessages: () =>{
         const socket = useAuthStore.getState().socket;
@@ -67,6 +74,30 @@ export const useChatStore = create((set, get)=>({
         socket.off("newMessage");
     },
 
-    
+    getFavorites: async() =>{
+        try {
+            const res = await axiosInstance.get("/favorites/get");
+            const favorites = Array.isArray(res.data) ? res.data : [];
+            set({ favorites });
+        } catch (error) {
+            toast.error(error.data);
+        }
+    },
+
+    toggleFavorite: async (userId) => {
+  try {
+    await axiosInstance.patch(`/favorites/add/${userId}`);
+
+    // Refresh favorites list
+    await get().getFavorites();
+
+    const updatedFavorites = get().favorites;
+    const isNowFavorite = updatedFavorites.some((fav) => fav._id === userId);
+
+    toast.success(isNowFavorite ? "Added to favorites" : "Removed from favorites");
+  } catch (error) {
+    toast.error(error?.response?.data?.message || "Failed to toggle favorite");
+  }
+},
     setSelectedUser: (selectedUser) =>set({ selectedUser })
-}))
+}));

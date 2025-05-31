@@ -14,7 +14,7 @@ const Profile = lazy(()=> import("./pages/Profile"));
 const Settings = lazy(()=> import("./pages/Settings"));
 
 function App() {
-  const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
+  const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
   const { theme } = useThemeStore();
 
   useEffect(()=>{

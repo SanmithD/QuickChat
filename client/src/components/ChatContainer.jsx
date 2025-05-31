@@ -1,29 +1,31 @@
 import { useEffect, useRef } from "react";
+
 import { formatMessageTime } from "../lib/utils";
 import { useAuthStore } from "../store/UseAuthStore";
 import { useChatStore } from "../store/UseChatStore";
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
-import MessageSkeleton from "./Skeletons/MessageSkeleton";
+import MessageSkeleton from "./skeletons/MessageSkeleton";
 
-function ChatContainer() {
+const ChatContainer = () => {
   const {
     messages,
     getMessages,
     isMessagesLoading,
+    selectedUser,
     listenToMessages,
     unsubscribeMessages,
-    selectedUser,
   } = useChatStore();
   const { authUser } = useAuthStore();
-  const messageEndRef = useRef();
+  const messageEndRef = useRef(null);
 
   useEffect(() => {
     getMessages(selectedUser._id);
+
     listenToMessages();
 
     return () => unsubscribeMessages();
-  }, [selectedUser._id, getMessages, unsubscribeMessages, listenToMessages]);
+  }, [authUser._id, selectedUser._id, getMessages, listenToMessages, unsubscribeMessages]);
 
   useEffect(() => {
     if (messageEndRef.current && messages) {
@@ -31,7 +33,7 @@ function ChatContainer() {
     }
   }, [messages]);
 
-  if (isMessagesLoading)
+  if (isMessagesLoading) {
     return (
       <div className="flex-1 flex flex-col overflow-auto">
         <ChatHeader />
@@ -39,18 +41,17 @@ function ChatContainer() {
         <MessageInput />
       </div>
     );
+  }
 
   return (
-    <div className=" flex-1 flex flex-col overflow-auto">
+    <div className="flex-1 flex flex-col overflow-auto">
       <ChatHeader />
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message) => (
           <div
             key={message._id}
-            className={`chat ${
-              message.senderId === authUser._id ? "chat-end" : "chat-start"
-            }`}
+            className={`chat ${message.senderId === authUser._id ? "chat-end" : "chat-start"}`}
             ref={messageEndRef}
           >
             <div className=" chat-image avatar">
@@ -87,6 +88,5 @@ function ChatContainer() {
       <MessageInput />
     </div>
   );
-}
-
+};
 export default ChatContainer;

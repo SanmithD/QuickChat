@@ -19,7 +19,7 @@ const authSchema = new mongoose.Schema({
     profilePic:{
         type: String,
         default: ""
-    }
+    },
 },{ timestamps: true });
 
 export const authModel = mongoose.model('User', authSchema);

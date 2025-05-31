@@ -1,6 +1,7 @@
 import { X } from "lucide-react";
 import { useAuthStore } from "../store/UseAuthStore";
 import { useChatStore } from "../store/UseChatStore";
+import AddToFavorite from "./AddToFavorite";
 
 const ChatHeader = () => {
   const { selectedUser, setSelectedUser } = useChatStore();
@@ -26,10 +27,16 @@ const ChatHeader = () => {
           </div>
         </div>
 
+        <div className="flex gap-3 items-center justify-center " >
+
+        <div>
+          <AddToFavorite userId={selectedUser._id}/>
+        </div>
         {/* Close button */}
         <button onClick={() => setSelectedUser(null)}>
           <X />
         </button>
+        </div>
       </div>
     </div>
   );

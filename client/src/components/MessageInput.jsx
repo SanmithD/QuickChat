@@ -5,7 +5,7 @@ import { useChatStore } from "../store/UseChatStore";
 
 function MessageInput() {
 
-    const [text, setText] = useState();
+    const [text, setText] = useState("");
     const [imagePreview, setImagePreview] = useState(null);
     const fileInputRef = useRef(null);
     const { sendMessage } = useChatStore();
@@ -37,7 +37,6 @@ function MessageInput() {
                 text: text.trim(),
                 image: imagePreview
             });
-
             setText("");
             setImagePreview(null)
             if(fileInputRef.current) fileInputRef.current.value = "";

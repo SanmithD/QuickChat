@@ -3,9 +3,10 @@ import cors from 'cors';
 import 'dotenv/config';
 import express from 'express';
 import connectDB from './lib/db.lib.js';
-import authRouter from './routes/auth.route.js';
-import messageRouter from './routes/message.route.js';
 import { app, server } from './lib/socket.js';
+import authRouter from './routes/auth.route.js';
+import favoriteRouter from './routes/favorite.route.js';
+import messageRouter from './routes/message.route.js';
 
 connectDB();
 
@@ -22,6 +23,7 @@ app.use(cookieParser());
 
 app.use('/api/auth', authRouter);
 app.use('/api/message', messageRouter);
+app.use('/api/favorites', favoriteRouter);
 
 server.listen(PORT,()=>{
     console.log(`server stated at ${PORT}`);
