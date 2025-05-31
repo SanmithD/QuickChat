@@ -5,13 +5,10 @@ import express from 'express';
 import connectDB from './lib/db.lib.js';
 import authRouter from './routes/auth.route.js';
 import messageRouter from './routes/message.route.js';
-// import http from 'http';
-// import { Socket } from 'socket.io';
+import { app, server } from './lib/socket.js';
 
 connectDB();
-const app = express();
-// const server = http.createServer(app);
-// const io = new Socket(server);
+
 const PORT = process.env.PORT || 5001;
 
 app.use(cors({
@@ -26,6 +23,6 @@ app.use(cookieParser());
 app.use('/api/auth', authRouter);
 app.use('/api/message', messageRouter);
 
-app.listen(PORT,()=>{
+server.listen(PORT,()=>{
     console.log(`server stated at ${PORT}`);
 })

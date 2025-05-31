@@ -17,7 +17,7 @@ export const protectRoute = async(req, res, next) =>{
                 message: "Invalid token"
             });
         }
-        const user = await authModel.findById(decoded.userId).select("password");
+        const user = await authModel.findById(decoded.userId).select("-password");
         if(!user){
             return res.status(404).json({
                 success: false,

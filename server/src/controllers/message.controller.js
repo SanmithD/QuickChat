@@ -1,4 +1,5 @@
 import cloudinary from "../lib/cloudinary.js";
+import { getReceiverSocketId, io } from '../lib/socket.js';
 import { authModel } from "../models/auth.model.js";
 import { messageModel } from "../models/message.model.js";
 
@@ -8,11 +9,7 @@ export const getUserSidebar = async (req, res) => {
     const filteredUsers = await authModel
       .find({ _id: { $ne: loggedUser } })
       .select("-password");
-    res.status(200).json({
-      success: true,
-      message: "Users",
-      filteredUsers,
-    });
+    res.status(200).json(filteredUsers);
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -34,11 +31,7 @@ export const getMessages = async (req, res) => {
       ],
     });
 
-    res.status(200).json({
-      success: true,
-      message: "All messages",
-      messages,
-    });
+    res.status(200).json(messages);
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -52,7 +45,7 @@ export const sendMessage = async (req, res) => {
   try {
     const { text, image } = req.body;
     const { id: receiverId } = req.params;
-    const myId = req.user._id;
+    const senderId = req.user._id;
 
     let imageUrl;
     if (image) {
@@ -61,14 +54,18 @@ export const sendMessage = async (req, res) => {
     }
 
     const newMessage = new messageModel({
-      myId,
+      senderId,
       receiverId,
       text,
       image: imageUrl,
     });
     await newMessage.save();
 
-    //todo : real time
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if(receiverSocketId){
+      io.to(receiverSocketId).emit("newMessage",newMessage);
+    }
+
     res.status(200).json({
       success: true,
       message: "message sent",

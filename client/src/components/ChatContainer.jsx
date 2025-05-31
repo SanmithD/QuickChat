@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { formatMessageTime } from "../lib/utils";
 import { useAuthStore } from "../store/UseAuthStore";
 import { useChatStore } from "../store/UseChatStore";
@@ -7,36 +7,57 @@ import MessageInput from "./MessageInput";
 import MessageSkeleton from "./Skeletons/MessageSkeleton";
 
 function ChatContainer() {
-  const { message, getMessage, isMessagesLoading, selectedUser } = useChatStore();
+  const {
+    messages,
+    getMessages,
+    isMessagesLoading,
+    listenToMessages,
+    unsubscribeMessages,
+    selectedUser,
+  } = useChatStore();
   const { authUser } = useAuthStore();
+  const messageEndRef = useRef();
 
-  useEffect(()=>{
-    getMessage(selectedUser._id);
-  },[selectedUser._id, getMessage]);
+  useEffect(() => {
+    getMessages(selectedUser._id);
+    listenToMessages();
 
-  if(isMessagesLoading) return (
-    <div className="flex-1 flex flex-col overflow-auto" >
-      <ChatHeader/>
-      <MessageSkeleton/>
-      <MessageInput/>
-    </div>
-  )
-  
+    return () => unsubscribeMessages();
+  }, [selectedUser._id, getMessages, unsubscribeMessages, listenToMessages]);
+
+  useEffect(() => {
+    if (messageEndRef.current && messages) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
+  if (isMessagesLoading)
+    return (
+      <div className="flex-1 flex flex-col overflow-auto">
+        <ChatHeader />
+        <MessageSkeleton />
+        <MessageInput />
+      </div>
+    );
+
   return (
-    <div className="flex flex-1 flex-col overflow-auto" >
-      <ChatHeader/>
-      <div className="flex overflow-y-auto p-4 space-y-4 " >
-         {message.map((data) => (
+    <div className=" flex-1 flex flex-col overflow-auto">
+      <ChatHeader />
+
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {messages.map((message) => (
           <div
-            key={data._id}
-            className={`chat ${data.senderId === authUser._id ? "chat-end" : "chat-start"}`}
-            // ref={messageEndRef}
+            key={message._id}
+            className={`chat ${
+              message.senderId === authUser._id ? "chat-end" : "chat-start"
+            }`}
+            ref={messageEndRef}
           >
             <div className=" chat-image avatar">
               <div className="size-10 rounded-full border">
                 <img
                   src={
-                    data.senderId === authUser._id
+                    message.senderId === authUser._id
                       ? authUser.profilePic || "/avatar.png"
                       : selectedUser.profilePic || "/avatar.png"
                   }
@@ -46,25 +67,26 @@ function ChatContainer() {
             </div>
             <div className="chat-header mb-1">
               <time className="text-xs opacity-50 ml-1">
-                {formatMessageTime(data.createdAt)}
+                {formatMessageTime(message.createdAt)}
               </time>
             </div>
             <div className="chat-bubble flex flex-col">
-              {data.image && (
+              {message.image && (
                 <img
-                  src={data.image}
+                  src={message.image}
                   alt="Attachment"
                   className="sm:max-w-[200px] rounded-md mb-2"
                 />
               )}
-              {data.text && <p>{data.text}</p>}
+              {message.text && <p>{message.text}</p>}
             </div>
           </div>
         ))}
       </div>
-      <MessageInput/>
+
+      <MessageInput />
     </div>
-  )
+  );
 }
 
-export default ChatContainer
+export default ChatContainer;
