@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "",
-    "start" : ""
+    "build": "npm install --prefix server && npm install --prefix client && npm run build --prefix client",
+    "start" : "npm run start --prefix server"
   },
   "repository": {
     "type": "git",
