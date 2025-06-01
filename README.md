@@ -2,7 +2,7 @@
 
 A simple real-time chat application built with the **MERN** stack, styled using **TailwindCSS**, **DaisyUI**, and state-managed with **Zustand**. Featuring image sharing with **Cloudinary** and real-time communication via **Socket.io**.
 
-![QuickChat Demo]("C:\users\sujan\OneDrive\Pictures\Screenshots\Screenshot 2025-06-01 112910.png")
+(C:\users\sujan\OneDrive\Pictures\Screenshots\Screenshot 2025-06-01 112910.png)
 
 ---
 
