@@ -4,7 +4,7 @@ import { io } from 'socket.io-client';
 import { create } from 'zustand';
 import { axiosInstance } from '../lib/axios';
 
-const BASE_URL = "http://localhost:5001/";
+const BASE_URL = "https://quickchat-1-flil.onrender.com/";
 
 export const useAuthStore = create((set, get)=>({
     authUser: null,
