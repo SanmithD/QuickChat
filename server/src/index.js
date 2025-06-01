@@ -12,7 +12,6 @@ import messageRouter from './routes/message.route.js';
 connectDB();
 
 const PORT = process.env.PORT || 5001;
-const __dirname = path.resolve();
 
 app.use(cors({
     origin: 'http://localhost:5173',
@@ -26,14 +25,6 @@ app.use(cookieParser());
 app.use('/api/auth', authRouter);
 app.use('/api/message', messageRouter);
 app.use('/api/favorites', favoriteRouter);
-
-if(process.env.NODE_ENV == "production"){
-    app.use(express.static(path.join(__dirname, "../../client/dist")));
-
-    app.get("*", (req, res)=>{
-        res.sendFile(path.join(__dirname, "../../client","dist","index.html"));
-    })
-}
 
 server.listen(PORT,()=>{
     console.log(`server stated at ${PORT}`);
