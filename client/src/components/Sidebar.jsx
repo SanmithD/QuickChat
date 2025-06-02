@@ -60,14 +60,14 @@ function Sidebar() {
           </label>
 
           <label className="cursor-pointer flex items-center gap-2">
-            <input
+            {/* <input
               type="checkbox"
               checked={showFavoritesOnly}
               onChange={(e) => setShowFavoritesOnly(e.target.checked)}
               className="checkbox checkbox-sm"
-            />
+            /> */}
             {/* <Star className="w-4 h-4 text-yellow-400" /> */}
-            <span className="text-sm">
+            <span className="text-sm" checked={showFavoritesOnly} onChange={(e) => setShowFavoritesOnly(e.target.checked)} >
               <Star className="size-6" />
             </span>
           </label>
