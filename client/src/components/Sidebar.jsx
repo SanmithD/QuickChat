@@ -1,4 +1,4 @@
-import { Users } from "lucide-react";
+import { Star, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "../store/UseAuthStore";
 import { useChatStore } from "../store/UseChatStore";
@@ -45,7 +45,7 @@ function Sidebar() {
           <span className="font-medium hidden lg:block">Contacts</span>
         </div>
 
-        <div className="mt-3 hidden lg:flex flex-col gap-2">
+        <div className="mt-3 flex lg:flex flex-col gap-2">
           <label className="cursor-pointer flex items-center gap-2">
             <input
               type="checkbox"
@@ -67,7 +67,9 @@ function Sidebar() {
               className="checkbox checkbox-sm"
             />
             {/* <Star className="w-4 h-4 text-yellow-400" /> */}
-            <span className="text-sm">Show favorites only</span>
+            <span className="text-sm">
+              <Star className="size-6" />
+            </span>
           </label>
         </div>
       </div>
