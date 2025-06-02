@@ -1,4 +1,4 @@
-import { Star, Users } from "lucide-react";
+import { Star, UserCheck, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "../store/UseAuthStore";
 import { useChatStore } from "../store/UseChatStore";
@@ -49,13 +49,19 @@ function Sidebar() {
 
         <div className="mt-3 flex lg:flex flex-col gap-2">
           <label className="cursor-pointer flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={showOnlineOnly}
-              onChange={(e) => setShowOnlineOnly(e.target.checked)}
-              className="checkbox checkbox-sm"
-            />
-            <span className="text-sm">Show online only</span>
+            <button
+              type="button"
+              onClick={() => setShowOnlineOnly((prev) => !prev)}
+              className="p-1"
+            >
+              <UserCheck
+                className={`size-6 transition-colors ${
+                  showOnlineOnly
+                    ? "text-green-500 fill-green-500"
+                    : "text-zinc-400"
+                }`}
+              />
+            </button>
             <span className="text-xs text-zinc-500 ml-auto">
               ({onlineUsers.length - 1} online)
             </span>
