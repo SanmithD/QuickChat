@@ -22,6 +22,10 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 app.use(cookieParser());
 
+app.get("/",(req, res)=>{
+    res.send("Hello world");
+})
+
 app.use('/api/auth', authRouter);
 app.use('/api/message', messageRouter);
 app.use('/api/favorites', favoriteRouter);
