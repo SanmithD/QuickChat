@@ -13,7 +13,7 @@ connectDB();
 const PORT = process.env.PORT || 5001;
 
 app.use(cors({
-    origin: ['quick-chat-omega-eight.vercel.app'],
+    origin: ['https://quick-chat-omega-eight.vercel.app'],
     methods: "GET,POST,PUT,DELETE, PATCH",
     credentials: true
 }));
