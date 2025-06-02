@@ -55,7 +55,7 @@ function Sidebar() {
               className="p-1"
             >
               <UserCheck
-                className={`size-6 transition-colors ${
+                className={`size-6 cursor-pointer transition-colors ${
                   showOnlineOnly
                     ? "text-green-500 fill-green-500"
                     : "text-zinc-400"
@@ -74,7 +74,7 @@ function Sidebar() {
               className="p-1"
             >
               <Star
-                className={`size-6 ${
+                className={`size-6 cursor-pointer  ${
                   showFavoritesOnly
                     ? "text-yellow-400 fill-yellow-400"
                     : "text-gray-400"
