@@ -27,7 +27,9 @@ function Sidebar() {
   // Filter logic
   let filteredUsers = users;
   if (showOnlineOnly) {
-    filteredUsers = filteredUsers.filter((user) => onlineUsers.includes(user._id));
+    filteredUsers = filteredUsers.filter((user) =>
+      onlineUsers.includes(user._id)
+    );
   }
   if (showFavoritesOnly) {
     filteredUsers = filteredUsers.filter((user) =>
@@ -60,16 +62,19 @@ function Sidebar() {
           </label>
 
           <label className="cursor-pointer flex items-center gap-2">
-            {/* <input
-              type="checkbox"
-              checked={showFavoritesOnly}
-              onChange={(e) => setShowFavoritesOnly(e.target.checked)}
-              className="checkbox checkbox-sm"
-            /> */}
-            {/* <Star className="w-4 h-4 text-yellow-400" /> */}
-            <span className="text-sm" checked={showFavoritesOnly} onChange={(e) => setShowFavoritesOnly(e.target.checked)} >
-              <Star className="size-6" />
-            </span>
+            <button
+              type="button"
+              onClick={() => setShowFavoritesOnly((prev) => !prev)}
+              className="p-1"
+            >
+              <Star
+                className={`size-6 ${
+                  showFavoritesOnly
+                    ? "text-yellow-400 fill-yellow-400"
+                    : "text-gray-400"
+                }`}
+              />
+            </button>
           </label>
         </div>
       </div>
@@ -80,7 +85,9 @@ function Sidebar() {
             key={user._id}
             onClick={() => setSelectedUser(user)}
             className={`w-full p-3 flex items-center gap-3 hover:bg-base-300 transition-colors ${
-              selectedUser?._id === user._id ? "bg-base-300 ring-1 ring-base-300" : ""
+              selectedUser?._id === user._id
+                ? "bg-base-300 ring-1 ring-base-300"
+                : ""
             }`}
           >
             <div className="relative mx-auto lg:mx-0">
