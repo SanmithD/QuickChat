@@ -55,10 +55,10 @@ function Sidebar() {
       }  lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200`}
     >
       <span
-        onClick={() => setIsSidebarExpanded((prev) => !prev)}
         className="cursor-pointer p-2 lg:hidden self-end"
       >
         <ArrowBigRight
+        onClick={() => setIsSidebarExpanded((prev) => !prev)}
           className={`size-5 transition-transform ${
             isSidebarExpanded ? "rotate-180" : ""
           }`}
