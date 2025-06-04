@@ -1,4 +1,4 @@
-import { Star, UserCheck, Users } from "lucide-react";
+import { ArrowBigRight, Star, UserCheck, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "../store/UseAuthStore";
 import { useChatStore } from "../store/UseChatStore";
@@ -17,6 +17,7 @@ function Sidebar() {
   } = useChatStore();
 
   const { onlineUsers } = useAuthStore();
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [showOnlineOnly, setShowOnlineOnly] = useState(false);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
@@ -39,8 +40,8 @@ function Sidebar() {
     );
   }
 
-  if(searchQuery.trim() !== ""){
-    filteredUsers = filteredUsers.filter((user)=>
+  if (searchQuery.trim() !== "") {
+    filteredUsers = filteredUsers.filter((user) =>
       user.fullName.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }
@@ -48,7 +49,21 @@ function Sidebar() {
   if (isUsersLoading) return <SidebarSkeleton />;
 
   return (
-    <aside className="h-full w-20 lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200">
+    <aside
+      className={`h-full ${
+        isSidebarExpanded ? "w-[80%]" : "w-20"
+      }  lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200`}
+    >
+      <span
+        onClick={() => setIsSidebarExpanded((prev) => !prev)}
+        className="cursor-pointer p-2 lg:hidden self-end"
+      >
+        <ArrowBigRight
+          className={`size-5 transition-transform ${
+            isSidebarExpanded ? "rotate-180" : ""
+          }`}
+        />
+      </span>
       <div className="border-b border-base-200 w-full p-5">
         <div className="flex items-center gap-2">
           <Users className="size-6" />
