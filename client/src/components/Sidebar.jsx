@@ -2,6 +2,7 @@ import { Star, UserCheck, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "../store/UseAuthStore";
 import { useChatStore } from "../store/UseChatStore";
+import SearchUser from "./SearchUser";
 import SidebarSkeleton from "./Skeletons/SidebarSkeleton";
 
 function Sidebar() {
@@ -16,6 +17,7 @@ function Sidebar() {
   } = useChatStore();
 
   const { onlineUsers } = useAuthStore();
+  const [searchQuery, setSearchQuery] = useState("");
   const [showOnlineOnly, setShowOnlineOnly] = useState(false);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
@@ -37,6 +39,12 @@ function Sidebar() {
     );
   }
 
+  if(searchQuery.trim() !== ""){
+    filteredUsers = filteredUsers.filter((user)=>
+      user.fullName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }
+
   if (isUsersLoading) return <SidebarSkeleton />;
 
   return (
@@ -46,7 +54,7 @@ function Sidebar() {
           <Users className="size-6" />
           <span className="font-medium hidden lg:block">Contacts</span>
         </div>
-
+        <SearchUser searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         <div className="mt-3 flex lg:flex flex-col gap-2">
           <label className="cursor-pointer flex items-center gap-2">
             <button
