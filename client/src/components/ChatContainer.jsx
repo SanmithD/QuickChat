@@ -5,7 +5,7 @@ import { useAuthStore } from "../store/UseAuthStore";
 import { useChatStore } from "../store/UseChatStore";
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
-import MessageSkeleton from './Skeletons/MessageSkeleton';
+import MessageSkeleton from "./Skeletons/MessageSkeleton";
 
 const ChatContainer = () => {
   const {
@@ -25,7 +25,13 @@ const ChatContainer = () => {
     listenToMessages();
 
     return () => unsubscribeMessages();
-  }, [authUser._id, selectedUser._id, getMessages, listenToMessages, unsubscribeMessages]);
+  }, [
+    authUser._id,
+    selectedUser._id,
+    getMessages,
+    listenToMessages,
+    unsubscribeMessages,
+  ]);
 
   useEffect(() => {
     if (messageEndRef.current && messages) {
@@ -37,7 +43,7 @@ const ChatContainer = () => {
     return (
       <div className="flex-1 flex flex-col overflow-auto">
         <ChatHeader />
-        <MessageSkeleton/>
+        <MessageSkeleton />
         <MessageInput />
       </div>
     );
@@ -51,7 +57,9 @@ const ChatContainer = () => {
         {messages.map((message) => (
           <div
             key={message._id}
-            className={`chat ${message.senderId === authUser._id ? "chat-end" : "chat-start"}`}
+            className={`chat ${
+              message.senderId === authUser._id ? "chat-end" : "chat-start"
+            }`}
             ref={messageEndRef}
           >
             <div className=" chat-image avatar">
@@ -73,13 +81,19 @@ const ChatContainer = () => {
             </div>
             <div className="chat-bubble flex flex-col">
               {message.image && (
-                <img
-                  src={message.image}
-                  alt="Attachment"
-                  className="sm:max-w-[200px] rounded-md mb-2"
+                <a
                   href={message.image}
-                />
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    src={message.image}
+                    alt="Attachment"
+                    className="sm:max-w-[200px] rounded-md mb-2"
+                  />
+                </a>
               )}
+
               {message.text && <p>{message.text}</p>}
             </div>
           </div>
