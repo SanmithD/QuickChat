@@ -51,7 +51,7 @@ function Sidebar() {
   return (
     <aside
       className={`h-full ${
-        isSidebarExpanded ? "w-[80%]" : "w-20"
+        isSidebarExpanded ? "w-50" : "w-20"
       }  lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200`}
     >
       <span
